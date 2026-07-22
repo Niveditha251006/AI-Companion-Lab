@@ -1,0 +1,8 @@
+.feature-card{
+    transition:0.3s ease;
+}
+
+.feature-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 10px 25px rgba(0,0,0,.3);
+}
