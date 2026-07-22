@@ -1,0 +1,27 @@
+.prompt-page {
+    max-width: 900px;
+    margin: auto;
+    padding: 40px;
+}
+
+.prompt-page textarea {
+    width: 100%;
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+.prompt-page button {
+    margin-top: 20px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.result-box {
+    margin-top: 40px;
+    padding: 20px;
+    border-radius: 10px;
+    background: #1f2937;
+}
