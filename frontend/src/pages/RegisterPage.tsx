@@ -2,18 +2,19 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/LoginPage.css";
 
-function LoginPage() {
+function RegisterPage() {
   const navigate = useNavigate();
 
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!email || !password) {
-      alert("⚠️ Please enter your email and password.");
+    if (!name || !email || !password) {
+      alert("⚠️ Please fill in all fields.");
       return;
     }
 
@@ -21,15 +22,16 @@ function LoginPage() {
       setLoading(true);
 
       const response = await fetch(
-        "http://127.0.0.1:5000/api/login",
+        "http://127.0.0.1:5000/api/register",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            email: email,
-            password: password,
+            name,
+            email,
+            password,
           }),
         }
       );
@@ -41,17 +43,11 @@ function LoginPage() {
         return;
       }
 
-      // Save login information
-      localStorage.setItem("isLoggedIn", "true");
-      localStorage.setItem("userEmail", data.user.email);
-      localStorage.setItem("userName", data.user.name);
-      localStorage.setItem("userId", String(data.user.id));
+      alert("✅ Account created successfully!");
 
-      alert("✅ Login successful!");
-
-      navigate("/dashboard");
+      navigate("/login");
     } catch (error) {
-      console.error("Login error:", error);
+      console.error("Registration error:", error);
 
       alert(
         "❌ Unable to connect to the backend. Make sure Flask is running."
@@ -69,13 +65,22 @@ function LoginPage() {
           🤖
         </div>
 
-        <h1>Welcome Back!</h1>
+        <h1>Create Account</h1>
 
         <p>
-          Login to continue your AI learning journey.
+          Start your AI learning journey today.
         </p>
 
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleRegister}>
+
+          <label>Name</label>
+
+          <input
+            type="text"
+            placeholder="Enter your name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
 
           <label>Email</label>
 
@@ -90,22 +95,22 @@ function LoginPage() {
 
           <input
             type="password"
-            placeholder="Enter your password"
+            placeholder="Create a password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
 
           <button type="submit" disabled={loading}>
-            {loading ? "⏳ Logging in..." : "🔐 Login"}
+            {loading ? "⏳ Creating..." : "🚀 Create Account"}
           </button>
 
         </form>
 
         <button
           className="back-button"
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/login")}
         >
-          ← Back to Home
+          ← Back to Login
         </button>
 
       </div>
@@ -113,4 +118,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default RegisterPage;

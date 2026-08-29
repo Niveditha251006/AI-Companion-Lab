@@ -1,0 +1,23 @@
+.dashboard-page {
+  max-width: 1000px;
+  margin: auto;
+  padding: 40px;
+}
+
+.dashboard-page h1 {
+  text-align: center;
+  color: white;
+  margin-bottom: 40px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+}
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+    margin-bottom:40px;
+}

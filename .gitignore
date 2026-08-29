@@ -1,0 +1,32 @@
+# Environment variables and secrets
+.env
+*.env
+
+# Python
+__pycache__/
+
+cat > .gitignore <<'EOF'
+# Environment variables and secrets
+.env
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# Node
+node_modules/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,27 +1,23 @@
-.prompt-page {
-    max-width: 900px;
-    margin: auto;
-    padding: 40px;
+.history-box {
+  margin-top: 30px;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  background: #f5f5f5;
+  padding: 20px;
+  border-radius: 12px;
 }
 
-.prompt-page textarea {
-    width: 100%;
-    margin-top: 20px;
-    padding: 15px;
-    border-radius: 10px;
-    font-size: 16px;
+.history-box h2 {
+  margin-bottom: 15px;
 }
 
-.prompt-page button {
-    margin-top: 20px;
-    padding: 12px 24px;
-    border-radius: 8px;
-    cursor: pointer;
+.history-box ul {
+  list-style: decimal;
+  padding-left: 20px;
 }
 
-.result-box {
-    margin-top: 40px;
-    padding: 20px;
-    border-radius: 10px;
-    background: #1f2937;
+.history-box li {
+  margin-bottom: 10px;
+  font-size: 17px;
 }

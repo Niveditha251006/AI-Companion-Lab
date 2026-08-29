@@ -1,0 +1,33 @@
+.dashboard-card {
+  background: #1f2937;
+  color: white;
+  padding: 25px;
+  border-radius: 16px;
+  text-align: center;
+  transition: 0.3s ease;
+  border: 1px solid #374151;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+.dashboard-card {
+  position: relative;
+  transition: transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.dashboard-card-icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.dashboard-card.clickable {
+  cursor: pointer;
+}
+
+.dashboard-card.clickable:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}

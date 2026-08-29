@@ -1,0 +1,242 @@
+/* ================================
+   CHAT ANALYZER PAGE
+================================ */
+
+.chat-analyzer-page {
+  min-height: 100vh;
+  padding: 40px;
+  background: #0f172a;
+  color: white;
+  box-sizing: border-box;
+}
+
+.chat-analyzer-page h1 {
+  text-align: center;
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.chat-analyzer-page > p {
+  text-align: center;
+  font-size: 18px;
+  color: #cbd5e1;
+  margin-bottom: 30px;
+}
+
+
+/* ================================
+   TEXTAREA
+================================ */
+
+.chat-analyzer-page textarea {
+  display: block;
+  width: 80%;
+  max-width: 900px;
+  min-height: 220px;
+  margin: 0 auto;
+
+  padding: 18px;
+
+  background: #1e293b;
+  color: white;
+
+  border: 2px solid #334155;
+  border-radius: 12px;
+
+  font-size: 16px;
+  font-family: inherit;
+
+  resize: vertical;
+
+  box-sizing: border-box;
+}
+
+.chat-analyzer-page textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+
+/* ================================
+   BUTTONS
+================================ */
+
+.analyzer-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+
+  margin: 25px 0 40px;
+}
+
+.analyzer-buttons button {
+  border: none;
+  border-radius: 10px;
+
+  padding: 14px 24px;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  background: #64748b;
+  color: white;
+
+  transition: 0.2s ease;
+}
+
+.analyzer-buttons button:hover {
+  transform: translateY(-2px);
+  background: #475569;
+}
+
+.analyzer-buttons button:first-child {
+  background: #2563eb;
+}
+
+.analyzer-buttons button:first-child:hover {
+  background: #1d4ed8;
+}
+
+
+/* ================================
+   RESULT BOX
+================================ */
+
+.result-box {
+  width: 90%;
+  max-width: 1000px;
+
+  margin: 0 auto;
+
+  padding: 30px;
+
+  background: #f8fafc;
+  color: #0f172a;
+
+  border-radius: 20px;
+
+  box-sizing: border-box;
+}
+
+.result-box h2 {
+  text-align: center;
+
+  font-size: 28px;
+
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+
+/* ================================
+   ANALYSIS GRID
+================================ */
+
+.analysis-grid {
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 20px;
+}
+
+
+/* ================================
+   ANALYSIS CARD
+================================ */
+
+.analysis-card {
+  background: white;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 14px;
+
+  padding: 22px;
+
+  text-align: center;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  transition: transform 0.2s ease,
+              box-shadow 0.2s ease;
+}
+
+.analysis-card:hover {
+  transform: translateY(-4px);
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.analysis-card span {
+  display: block;
+
+  font-size: 30px;
+
+  margin-bottom: 10px;
+}
+
+.analysis-card h3 {
+  margin: 5px 0;
+
+  font-size: 17px;
+
+  color: #334155;
+}
+
+.analysis-card p {
+  margin: 8px 0 0;
+
+  font-size: 24px;
+
+  font-weight: 700;
+
+  color: #2563eb;
+
+  word-break: break-word;
+}
+
+
+/* ================================
+   RESPONSIVE DESIGN
+================================ */
+
+@media (max-width: 900px) {
+  .analysis-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .chat-analyzer-page textarea {
+    width: 95%;
+  }
+
+  .result-box {
+    width: 95%;
+  }
+}
+
+
+@media (max-width: 600px) {
+  .chat-analyzer-page {
+    padding: 20px;
+  }
+
+  .chat-analyzer-page h1 {
+    font-size: 28px;
+  }
+
+  .analysis-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .analyzer-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .analyzer-buttons button {
+    width: 200px;
+  }
+}

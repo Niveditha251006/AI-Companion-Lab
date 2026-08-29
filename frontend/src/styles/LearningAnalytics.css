@@ -1,0 +1,29 @@
+.analytics-box {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.analytics-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.analytics-item span:first-child {
+  width: 180px;
+}
+
+.analytics-item progress {
+  flex: 1;
+  height: 18px;
+}
+
+.analytics-item span:last-child {
+  width: 50px;
+  text-align: right;
+  font-weight: bold;
+}

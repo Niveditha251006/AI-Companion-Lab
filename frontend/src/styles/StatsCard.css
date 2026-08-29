@@ -1,0 +1,12 @@
+.stats-card{
+    background:#242f40;
+    color:white;
+    padding:20px;
+    border-radius:15px;
+    text-align:center;
+    transition:.3s;
+}
+
+.stats-card:hover{
+    transform:translateY(-5px);
+}

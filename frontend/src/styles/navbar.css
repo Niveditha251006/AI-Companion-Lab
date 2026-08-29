@@ -1,52 +1,98 @@
-/* Navbar Container */
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  width: 100%;
 
-    padding: 20px 40px;
-    background-color: var(--surface);
-    border-bottom: 1px solid var(--border);
+  padding: 15px 25px;
+
+  box-sizing: border-box;
+
+  background: #111827;
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  position: sticky;
+  top: 0;
+
+  z-index: 1000;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* Logo */
-.logo {
-    font-size: 28px;
-    font-weight: bold;
-    color: var(--text);
+.navbar-logo {
+  font-size: 20px;
+  font-weight: bold;
+
+  cursor: pointer;
+
+  white-space: nowrap;
 }
 
-/* Navigation Links */
-.nav-links {
-    display: flex;
-    gap: 30px;
-    list-style: none;
+.navbar-links {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
-/* Individual Link */
-.nav-links a {
-    color: var(--text);
-    text-decoration: none;
-    transition: 0.3s;
+.navbar-links button {
+  padding: 9px 12px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: transparent;
+  color: #e5e7eb;
+
+  font-size: 14px;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
 }
 
-.nav-links a:hover {
-    color: var(--primary);
+.navbar-links button:hover {
+  background: #2563eb;
+  color: white;
 }
 
-/* Login Button */
-.login-btn {
-    background: var(--primary);
-    color: white;
-
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-
-    cursor: pointer;
-    transition: 0.3s;
+.navbar-links .logout-button {
+  background: #dc2626;
+  color: white;
 }
 
-.login-btn:hover {
-    background: var(--primary-hover);
+.navbar-links .logout-button:hover {
+  background: #b91c1c;
+}
+
+@media (max-width: 900px) {
+  .navbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .navbar-logo {
+    text-align: center;
+  }
+
+  .navbar-links {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .navbar-links {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .navbar-links button {
+    width: 100%;
+  }
 }
