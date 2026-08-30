@@ -59,47 +59,35 @@ const getAchievements = (): Achievement[] => {
   const saved = localStorage.getItem("achievements");
 
   if (!saved) {
-    return defaultAchievements.map(
-      (achievement) => ({
-        ...achievement,
-      })
-    );
+    return defaultAchievements.map((achievement) => ({
+      ...achievement,
+    }));
   }
 
   try {
     const parsed = JSON.parse(saved);
 
     if (!Array.isArray(parsed)) {
-      return defaultAchievements.map(
-        (achievement) => ({
-          ...achievement,
-        })
-      );
+      return defaultAchievements.map((achievement) => ({
+        ...achievement,
+      }));
     }
 
-    return defaultAchievements.map(
-      (defaultAchievement) => {
-        const savedAchievement =
-          parsed.find(
-            (item: Achievement) =>
-              item.id ===
-              defaultAchievement.id
-          );
+    return defaultAchievements.map((defaultAchievement) => {
+      const savedAchievement = parsed.find(
+        (item: Achievement) =>
+          item.id === defaultAchievement.id
+      );
 
-        return {
-          ...defaultAchievement,
-          unlocked: Boolean(
-            savedAchievement?.unlocked
-          ),
-        };
-      }
-    );
+      return {
+        ...defaultAchievement,
+        unlocked: Boolean(savedAchievement?.unlocked),
+      };
+    });
   } catch {
-    return defaultAchievements.map(
-      (achievement) => ({
-        ...achievement,
-      })
-    );
+    return defaultAchievements.map((achievement) => ({
+      ...achievement,
+    }));
   }
 };
 
@@ -109,7 +97,7 @@ const getAchievements = (): Achievement[] => {
 
 const saveAchievements = (
   achievements: Achievement[]
-) => {
+): void => {
   localStorage.setItem(
     "achievements",
     JSON.stringify(achievements)
@@ -121,8 +109,7 @@ const saveAchievements = (
 // =====================================
 
 const getTotalPrompts = (): number => {
-  const saved =
-    localStorage.getItem("promptHistory");
+  const saved = localStorage.getItem("promptHistory");
 
   if (!saved) {
     return 0;
@@ -144,14 +131,36 @@ const getTotalPrompts = (): number => {
 // =====================================
 
 const getTotalLessons = (): number => {
-  const saved =
-    localStorage.getItem("totalLessonsCompleted");
+  const saved = localStorage.getItem(
+    "totalLessonsCompleted"
+  );
 
   if (!saved) {
     return 0;
   }
 
   return Number(saved) || 0;
+};
+
+// =====================================
+// RECORD LESSON COMPLETION
+// =====================================
+
+export const recordLessonCompletion = (): number => {
+  const totalLessons = getTotalLessons();
+
+  const newTotal = totalLessons + 1;
+
+  localStorage.setItem(
+    "totalLessonsCompleted",
+    String(newTotal)
+  );
+
+  window.dispatchEvent(
+    new Event("activityUpdated")
+  );
+
+  return newTotal;
 };
 
 // =====================================
@@ -182,202 +191,162 @@ const getStreak = (): number => {
 // DAILY GOALS
 // =====================================
 
-const areDailyGoalsCompleted =
-  (): boolean => {
-    const saved =
-      localStorage.getItem(
-        "dailyGoals"
-      );
+const areDailyGoalsCompleted = (): boolean => {
+  const saved = localStorage.getItem(
+    "dailyGoals"
+  );
 
-    if (!saved) {
-      return false;
-    }
+  if (!saved) {
+    return false;
+  }
 
-    try {
-      const goals =
-        JSON.parse(saved);
+  try {
+    const goals = JSON.parse(saved);
 
-      return (
-        Boolean(goals.lesson) &&
-        Boolean(goals.prompts) &&
-        Boolean(goals.xp)
-      );
-    } catch {
-      return false;
-    }
-  };
+    return (
+      Boolean(goals.lesson) &&
+      Boolean(goals.prompts) &&
+      Boolean(goals.xp)
+    );
+  } catch {
+    return false;
+  }
+};
 
 // =====================================
 // CHAT ANALYZER
 // =====================================
 
-const hasUsedChatAnalyzer =
-  (): boolean => {
-    const saved =
-      localStorage.getItem(
-        "chatAnalysisHistory"
-      );
+const hasUsedChatAnalyzer = (): boolean => {
+  const saved = localStorage.getItem(
+    "chatAnalysisHistory"
+  );
 
-    if (!saved) {
-      return false;
-    }
+  if (!saved) {
+    return false;
+  }
 
-    try {
-      const parsed =
-        JSON.parse(saved);
+  try {
+    const parsed = JSON.parse(saved);
 
-      return (
-        Array.isArray(parsed) &&
-        parsed.length > 0
-      );
-    } catch {
-      return false;
-    }
-  };
+    return (
+      Array.isArray(parsed) &&
+      parsed.length > 0
+    );
+  } catch {
+    return false;
+  }
+};
 
 // =====================================
 // CHECK ALL ACHIEVEMENTS
 // =====================================
 
-export const checkAchievements =
-  (): {
-    achievements: Achievement[];
-    newlyUnlocked: Achievement[];
-  } => {
-    const achievements =
-      getAchievements();
+export const checkAchievements = (): {
+  achievements: Achievement[];
+  newlyUnlocked: Achievement[];
+} => {
+  const achievements = getAchievements();
 
-    const totalPrompts =
-      getTotalPrompts();
+  const totalPrompts = getTotalPrompts();
+  const totalLessons = getTotalLessons();
+  const xp = getTotalXP();
+  const streak = getStreak();
+  const goalsCompleted =
+    areDailyGoalsCompleted();
+  const usedChatAnalyzer =
+    hasUsedChatAnalyzer();
 
-    const totalLessons =
-      getTotalLessons();
+  const newlyUnlocked: Achievement[] = [];
 
-    const xp =
-      getTotalXP();
+  const updatedAchievements =
+    achievements.map((achievement) => {
+      // Already unlocked
+      if (achievement.unlocked) {
+        return achievement;
+      }
 
-    const streak =
-      getStreak();
+      let unlocked = false;
 
-    const goalsCompleted =
-      areDailyGoalsCompleted();
+      switch (achievement.id) {
+        // =========================
+        // FIRST STEP
+        // =========================
 
-    const usedChatAnalyzer =
-      hasUsedChatAnalyzer();
+        case "first-lesson":
+          unlocked = totalLessons >= 1;
+          break;
 
-    const newlyUnlocked: Achievement[] =
-      [];
+        // =========================
+        // PROMPT BEGINNER
+        // =========================
 
-    const updatedAchievements =
-      achievements.map(
-        (achievement) => {
-          // Already unlocked
-          if (achievement.unlocked) {
-            return achievement;
-          }
+        case "prompt-beginner":
+          unlocked = totalPrompts >= 5;
+          break;
 
-          let unlocked = false;
+        // =========================
+        // 3-DAY STREAK
+        // =========================
 
-          switch (achievement.id) {
+        case "three-day-streak":
+          unlocked = streak >= 3;
+          break;
 
-            // =========================
-            // FIRST STEP
-            // =========================
+        // =========================
+        // XP HUNTER
+        // =========================
 
-            case "first-lesson":
-              unlocked =
-                totalLessons >= 1;
-              break;
+        case "xp-hunter":
+          unlocked = xp >= 100;
+          break;
 
-            // =========================
-            // PROMPT BEGINNER
-            // =========================
+        // =========================
+        // GOAL MASTER
+        // =========================
 
-            case "prompt-beginner":
-              unlocked =
-                totalPrompts >= 5;
-              break;
+        case "goal-master":
+          unlocked = goalsCompleted;
+          break;
 
-            // =========================
-            // 3-DAY STREAK
-            // =========================
+        // =========================
+        // AI EXPLORER
+        // =========================
 
-            case "three-day-streak":
-              unlocked =
-                streak >= 3;
-              break;
+        case "ai-explorer":
+          unlocked =
+            totalPrompts >= 1 &&
+            usedChatAnalyzer;
+          break;
 
-            // =========================
-            // XP HUNTER
-            // =========================
+        default:
+          unlocked = false;
+      }
 
-            case "xp-hunter":
-              unlocked =
-                xp >= 100;
-              break;
+      if (unlocked) {
+        const unlockedAchievement: Achievement = {
+          ...achievement,
+          unlocked: true,
+        };
 
-            // =========================
-            // GOAL MASTER
-            // =========================
+        newlyUnlocked.push(
+          unlockedAchievement
+        );
 
-            case "goal-master":
-              unlocked =
-                goalsCompleted;
-              break;
+        return unlockedAchievement;
+      }
 
-            // =========================
-            // AI EXPLORER
-            // =========================
+      return achievement;
+    });
 
-            case "ai-explorer":
-              unlocked =
-                totalPrompts >= 1 &&
-                usedChatAnalyzer;
-              break;
+  saveAchievements(updatedAchievements);
 
-            default:
-              unlocked = false;
-          }
-
-          if (unlocked) {
-            const unlockedAchievement: Achievement =
-              {
-                ...achievement,
-                unlocked: true,
-              };
-
-            newlyUnlocked.push(
-              unlockedAchievement
-            );
-
-            return unlockedAchievement;
-          }
-
-          return achievement;
-        }
-      );
-
-    saveAchievements(
-      updatedAchievements
-    );
-
-    return {
-      achievements:
-        updatedAchievements,
-      newlyUnlocked,
-    };
+  return {
+    achievements: updatedAchievements,
+    newlyUnlocked,
   };
-const totalLessons =
-  Number(
-    localStorage.getItem(
-      "totalLessonsCompleted"
-    )
-  ) || 0;
+};
 
-localStorage.setItem(
-  "totalLessonsCompleted",
-  String(totalLessons + 1)
-);
 // =====================================
 // GET SAVED ACHIEVEMENTS
 // =====================================
