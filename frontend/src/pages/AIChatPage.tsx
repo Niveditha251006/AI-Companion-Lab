@@ -449,39 +449,19 @@ function AIChatPage() {
       {/* =====================================
           CLEAR CHAT
       ===================================== */}
-
-      <div
-        style={{
-          maxWidth: "1000px",
-          margin: "15px auto 0",
-          display: "flex",
-          justifyContent: "flex-end",
-        }}
-      >
+<div className="clear-chat-wrapper">
 
         <button
-          onClick={clearChat}
-          disabled={
-            loading ||
-            loadingHistory ||
-            messages.length === 0
-          }
-          style={{
-            padding: "10px 16px",
-            border: "none",
-            borderRadius: "10px",
-            cursor:
-              messages.length === 0
-                ? "not-allowed"
-                : "pointer",
-            opacity:
-              messages.length === 0
-                ? 0.5
-                : 1,
-          }}
-        >
-          🗑️ Clear Chat
-        </button>
+  className="clear-chat-button"
+  onClick={clearChat}
+  disabled={
+    loading ||
+    loadingHistory ||
+    messages.length === 0
+  }
+>
+  🗑️ Clear Chat
+</button>
 
       </div>
 
