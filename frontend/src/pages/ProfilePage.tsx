@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/ProfilePage.css";
-
+import { API_BASE_URL } from "../config";
 type Course = {
   id: number;
   title: string;
@@ -38,7 +38,7 @@ useEffect(() => {
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:5000/api/profile/${userId}`
+        `${API_BASE_URL}/profile/${userId}`
       );
 
       const data = await response.json();
@@ -162,7 +162,7 @@ useEffect(() => {
       setLoading(true);
 
       const response = await fetch(
-        `http://127.0.0.1:5000/api/profile/${userId}`,
+        `${API_BASE_URL}/profile/${userId}`,
         {
           method: "PUT",
 

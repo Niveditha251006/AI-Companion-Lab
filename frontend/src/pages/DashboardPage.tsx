@@ -9,8 +9,7 @@ import StreakCard from "../components/StreakCard";
 import XPCard from "../components/XPCard";
 import AchievementCard from "../components/AchievementCard";
 
-const API_BASE_URL =
-  "http://127.0.0.1:5000/api";
+import { API_BASE_URL } from "../config";
 
 function DashboardPage() {
   const navigate = useNavigate();

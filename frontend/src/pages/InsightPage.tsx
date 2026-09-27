@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "../styles/InsightsPage.css";
-
+import { API_BASE_URL } from "../config";
 type User = {
   id: number;
   name: string;
@@ -70,7 +70,7 @@ function InsightPage() {
       setError("");
 
       const response = await fetch(
-        `http://127.0.0.1:5000/api/insights/${userId}`
+       `${API_BASE_URL}/insights/${userId}` 
       );
 
       const result = await response.json();

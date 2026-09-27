@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/LoginPage.css";
-
+import { API_BASE_URL } from "../config";
 function RegisterPage() {
   const navigate = useNavigate();
 
@@ -22,7 +22,7 @@ function RegisterPage() {
       setLoading(true);
 
       const response = await fetch(
-        "http://127.0.0.1:5000/api/register",
+       `${API_BASE_URL}/register`,
         {
           method: "POST",
           headers: {
