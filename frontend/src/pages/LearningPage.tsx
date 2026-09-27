@@ -10,7 +10,6 @@ import CourseModal from "../components/CourseModal";
 import AchievementCard from "../components/AchievementCard";
 import Toast from "../components/Toast";
 
-import { recordLessonActivity } from "../utils/activity";
 
 type Course = {
   id: number;
@@ -362,13 +361,44 @@ console.log(
         }
       );
 
-      // Record activity
-      recordLessonActivity();
+      // =================================
+// RECORD LESSON ACTIVITY
+// =================================
 
-      console.log(
-        "✅ Progress saved:",
-        data
-      );
+const activityResponse = await fetch(
+  `${API_BASE_URL}/activity/lesson`,
+  {
+    method: "POST",
+
+    headers: {
+      "Content-Type": "application/json",
+    },
+
+    body: JSON.stringify({
+      user_id: Number(userId),
+    }),
+  }
+);
+
+const activityData =
+  await activityResponse.json();
+
+if (!activityResponse.ok) {
+  throw new Error(
+    activityData.message ||
+      "Failed to record lesson activity"
+  );
+}
+
+console.log(
+  "✅ Lesson activity recorded:",
+  activityData
+);
+
+console.log(
+  "✅ Progress saved:",
+  data
+);
 
       if (newProgress >= 100) {
         showToast(
@@ -577,9 +607,12 @@ console.log(
 
       {/* CONTINUE LEARNING */}
 
-      <ContinueLearning
-        course={lastOpenedCourse}
-      />
+     <ContinueLearning
+  course={lastOpenedCourse}
+  onContinue={() => {
+    setShowModal(true);
+  }}
+     />
 
       {/* STATISTICS */}
 
@@ -699,20 +732,18 @@ console.log(
 
       </div>
 
-      {/* COURSE MODAL */}
-
-      {showModal &&
-        lastOpenedCourse && (
-          <CourseModal
-            course={
-              lastOpenedCourse
-            }
-
-            onClose={() => {
-              setShowModal(false);
-            }}
-          />
-        )}
+      
+{showModal && lastOpenedCourse && (
+  <CourseModal
+    course={lastOpenedCourse}
+    onClose={() => setShowModal(false)}
+    onProgressUpdate={async (courseId, progress) => {
+      await increaseProgress(courseId);
+    }}
+  />
+)}
+  
+       )
 
     </div>
   );

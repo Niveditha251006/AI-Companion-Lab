@@ -5,10 +5,12 @@ interface Course {
 
 interface ContinueLearningProps {
   course: Course | null;
+  onContinue: () => void;
 }
 
 function ContinueLearning({
   course,
+  onContinue,
 }: ContinueLearningProps) {
   if (!course) return null;
 
@@ -20,7 +22,9 @@ function ContinueLearning({
 
       <p>{course.progress}% Completed</p>
 
-      <button>Continue</button>
+      <button onClick={onContinue}>
+        Continue
+      </button>
     </div>
   );
 }

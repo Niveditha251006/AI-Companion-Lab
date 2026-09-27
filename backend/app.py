@@ -1,5 +1,9 @@
 from flask import Flask
 from flask_cors import CORS
+from dotenv import load_dotenv
+
+# Load environment variables before importing application modules
+load_dotenv()
 
 from api.auth import auth
 from api.chat_analysis import chat_analysis
@@ -8,6 +12,9 @@ from api.prompt_history import prompt_history
 from routes.learning import learning
 from routes.dashboard import dashboard
 from api.ai_chat import ai_chat
+from routes.activity import activity
+from api.fact_checker import fact_checker
+from api.prompt_analysis import prompt_analysis
 
 app = Flask(__name__)
 
@@ -49,10 +56,22 @@ app.register_blueprint(
 )
 
 app.register_blueprint(
-    ai_chat,
+    activity,
     url_prefix="/api"
 )
 
+app.register_blueprint(
+    ai_chat,
+    url_prefix="/api"
+)
+app.register_blueprint(
+    fact_checker,
+     url_prefix="/api"
+ )
+app.register_blueprint(
+    prompt_analysis,
+    url_prefix="/api"
+)
 # =========================
 # RUN FLASK SERVER
 # =========================

@@ -1,32 +1,17 @@
-import { useEffect, useState } from "react";
 import "../styles/XPCard.css";
 
 import {
-  getXP,
   getCurrentLevel,
   getNextLevel,
   getLevelProgress,
   getXPToNextLevel,
 } from "../utils/xp";
 
-function XPCard() {
-  const [xp, setXP] = useState(0);
+type XPCardProps = {
+  xp: number;
+};
 
-  const loadXP = () => {
-    setXP(getXP());
-  };
-
-  useEffect(() => {
-    loadXP();
-
-    window.addEventListener("activityUpdated", loadXP);
-    window.addEventListener("focus", loadXP);
-
-    return () => {
-      window.removeEventListener("activityUpdated", loadXP);
-      window.removeEventListener("focus", loadXP);
-    };
-  }, []);
+function XPCard({ xp }: XPCardProps) {
 
   const currentLevel = getCurrentLevel(xp);
   const nextLevel = getNextLevel(xp);
@@ -35,9 +20,11 @@ function XPCard() {
 
   return (
     <div className="xp-card">
+
       <h2>⭐ XP Progress</h2>
 
       <div className="xp-level">
+
         <span>
           Level {currentLevel.level}
         </span>
@@ -45,15 +32,18 @@ function XPCard() {
         <strong>
           {xp} XP
         </strong>
+
       </div>
 
       <div className="xp-progress-bar">
+
         <div
           className="xp-progress-fill"
           style={{
             width: `${progress}%`,
           }}
         />
+
       </div>
 
       <p>
@@ -70,6 +60,7 @@ function XPCard() {
       <small>
         {Math.round(progress)}% complete
       </small>
+
     </div>
   );
 }

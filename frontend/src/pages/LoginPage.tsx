@@ -41,12 +41,12 @@ function LoginPage() {
         return;
       }
 
-      // Save login information
+      // Save authentication information
       localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("authToken", data.token);
       localStorage.setItem("userEmail", data.user.email);
       localStorage.setItem("userName", data.user.name);
       localStorage.setItem("userId", String(data.user.id));
-
       alert("✅ Login successful!");
 
       navigate("/dashboard");

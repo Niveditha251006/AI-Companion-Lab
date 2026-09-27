@@ -1,6 +1,6 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from database.connection import get_db_connection
-
+from middleware.auth_middleware import token_required
 
 dashboard = Blueprint("dashboard", __name__)
 
@@ -9,8 +9,10 @@ dashboard = Blueprint("dashboard", __name__)
 # GET DASHBOARD DATA
 # =========================================================
 
-@dashboard.route("/dashboard/<int:user_id>", methods=["GET"])
-def get_dashboard_data(user_id):
+@dashboard.route("/dashboard", methods=["GET"])
+@token_required
+def get_dashboard():
+    user_id = request.user["user_id"]
 
     db = None
     cursor = None
@@ -212,3 +214,90 @@ def get_dashboard_data(user_id):
 
         if db:
             db.close()
+@dashboard.route("/dashboard/progress", methods=["POST"])
+def update_user_progress():
+
+    data = request.get_json()
+
+    if not data:
+        return jsonify({"message": "Request data is required"}), 400
+
+    user_id = data.get("user_id")
+    xp = data.get("xp")
+    streak = data.get("streak")
+    last_active_date = data.get("last_active_date")
+
+    if user_id is None:
+        return jsonify({"message": "User ID is required"}), 400
+
+    if xp is None:
+        return jsonify({"message": "XP is required"}), 400
+
+    if streak is None:
+        return jsonify({"message": "Streak is required"}), 400
+
+    db = get_db_connection()
+
+    if not db:
+        return jsonify({"message": "Database connection failed"}), 500
+
+    cursor = db.cursor(dictionary=True)
+
+    try:
+        cursor.execute(
+            """
+            SELECT id
+            FROM users
+            WHERE id = %s
+            """,
+            (user_id,)
+        )
+
+        user = cursor.fetchone()
+
+        if not user:
+            return jsonify({"message": "User not found"}), 404
+
+        cursor.execute(
+            """
+            INSERT INTO user_progress
+            (
+                user_id,
+                xp,
+                streak,
+                last_active_date
+            )
+            VALUES (%s, %s, %s, %s)
+            ON DUPLICATE KEY UPDATE
+                xp = VALUES(xp),
+                streak = VALUES(streak),
+                last_active_date = VALUES(last_active_date)
+            """,
+            (
+                user_id,
+                int(xp),
+                int(streak),
+                last_active_date
+            )
+        )
+
+        db.commit()
+
+        return jsonify({
+            "message": "User progress updated successfully",
+            "xp": int(xp),
+            "streak": int(streak)
+        }), 200
+
+    except Exception as error:
+        db.rollback()
+        print("❌ USER PROGRESS ERROR:", error)
+
+        return jsonify({
+            "message": "Failed to update user progress",
+            "error": str(error)
+        }), 500
+
+    finally:
+        cursor.close()
+        db.close()

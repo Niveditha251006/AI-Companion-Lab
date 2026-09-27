@@ -109,21 +109,11 @@ const saveAchievements = (
 // =====================================
 
 const getTotalPrompts = (): number => {
-  const saved = localStorage.getItem("promptHistory");
-
-  if (!saved) {
-    return 0;
-  }
-
-  try {
-    const parsed = JSON.parse(saved);
-
-    return Array.isArray(parsed)
-      ? parsed.length
-      : 0;
-  } catch {
-    return 0;
-  }
+  return Number(
+    localStorage.getItem(
+      "totalPromptsImproved"
+    )
+  ) || 0;
 };
 
 // =====================================

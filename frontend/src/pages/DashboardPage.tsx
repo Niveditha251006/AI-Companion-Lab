@@ -17,20 +17,18 @@ type DashboardData = {
   };
 
   statistics: {
-    prompt_count: number;
-    completed_courses: number;
-    overall_progress: number;
-    xp: number;
-    streak: number;
-  };
+  prompt_count: number;
+  completed_courses: number;
+  overall_progress: number;
+  xp: number;
+  streak: number;
+};
 };
 
 const API_BASE_URL =
   "http://127.0.0.1:5000/api";
 
-
 function DashboardPage() {
-
   const navigate = useNavigate();
 
   const [userName, setUserName] =
@@ -57,7 +55,6 @@ function DashboardPage() {
   const [error, setError] =
     useState("");
 
-
   // =========================================================
   // USER ID
   // =========================================================
@@ -71,9 +68,7 @@ function DashboardPage() {
   // =========================================================
 
   const loadDashboardData = async () => {
-
     if (!userId) {
-
       setError(
         "User ID not found. Please login again."
       );
@@ -84,32 +79,34 @@ function DashboardPage() {
     }
 
     try {
-
       setLoading(true);
-
       setError("");
 
-      const response = await fetch(
-        `${API_BASE_URL}/dashboard/${userId}`
-      );
 
-      const data: DashboardData =
+      // -----------------------------------------
+      // LOAD USER / COURSE DATA FROM BACKEND
+      // -----------------------------------------
+
+      const token = localStorage.getItem("authToken");
+
+const response = await fetch(
+  `${API_BASE_URL}/dashboard`,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+);
+
+      const data =
         await response.json();
 
       if (!response.ok) {
-
         throw new Error(
-          data &&
-          "message" in data
-            ? String(
-                (
-                  data as any
-                ).message
-              )
-            : "Failed to load dashboard data."
+          data?.message ||
+            "Failed to load dashboard data."
         );
       }
-
 
       // =====================================================
       // USER
@@ -119,120 +116,102 @@ function DashboardPage() {
         data.user?.name || "User"
       );
 
-
-      // Keep localStorage username
-      // synchronized for other pages
-
       localStorage.setItem(
         "userName",
         data.user?.name || "User"
       );
 
-
       // =====================================================
-      // STATISTICS
+      // BACKEND COURSE STATISTICS
       // =====================================================
 
       const statistics =
-        data.statistics;
+  data.statistics || {};
 
+setPromptCount(
+  Number(
+    statistics.prompt_count || 0
+  )
+);
 
-      setPromptCount(
-        Number(
-          statistics?.prompt_count || 0
-        )
-      );
+setXP(
+  Number(
+    statistics.xp || 0
+  )
+);
 
+setStreak(
+  Number(
+    statistics.streak || 0
+  )
+);
 
-      setCompletedCourses(
-        Number(
-          statistics?.completed_courses || 0
-        )
-      );
+setCompletedCourses(
+  Number(
+    statistics.completed_courses || 0
+  )
+);
 
-
-      setOverallProgress(
-        Number(
-          statistics?.overall_progress || 0
-        )
-      );
-
-
-      setXP(
-        Number(
-          statistics?.xp || 0
-        )
-      );
-
-
-      setStreak(
-        Number(
-          statistics?.streak || 0
-        )
-      );
-
+setOverallProgress(
+  Number(
+    statistics.overall_progress || 0
+  )
+);
 
       console.log(
         "✅ Dashboard data loaded:",
         data
       );
-
     } catch (error) {
-
       console.error(
         "❌ Dashboard error:",
         error
       );
 
+      // -----------------------------------------------------
+      // IMPORTANT:
+      // Even if MySQL is unavailable, keep local
+      // gamification data visible.
+      // -----------------------------------------------------
+
       setError(
-        error instanceof Error
-          ? error.message
-          : "Unable to load dashboard."
-      );
-
+  error instanceof Error
+    ? error.message
+    : "Unable to load dashboard."
+);
     } finally {
-
       setLoading(false);
-
     }
   };
-
 
   // =========================================================
   // LOAD WHEN PAGE OPENS
   // =========================================================
 
   useEffect(() => {
+  loadDashboardData();
 
+  const handleFocus = () => {
     loadDashboardData();
+  };
 
-    const handleFocus = () => {
-      loadDashboardData();
-    };
+  window.addEventListener(
+    "focus",
+    handleFocus
+  );
 
-    window.addEventListener(
+  return () => {
+    window.removeEventListener(
       "focus",
       handleFocus
     );
-
-    return () => {
-
-      window.removeEventListener(
-        "focus",
-        handleFocus
-      );
-
-    };
-
-  }, [userId]);
-
-
+  };
+}, [userId]);
   // =========================================================
   // LOADING
   // =========================================================
 
   if (loading) {
-
     return (
       <div className="dashboard-page">
 
@@ -253,13 +232,11 @@ function DashboardPage() {
     );
   }
 
-
   // =========================================================
   // ERROR
   // =========================================================
 
   if (error) {
-
     return (
       <div className="dashboard-page">
 
@@ -285,13 +262,11 @@ function DashboardPage() {
     );
   }
 
-
   // =========================================================
   // PAGE
   // =========================================================
 
   return (
-
     <div className="dashboard-page">
 
       {/* =====================================================
@@ -301,7 +276,6 @@ function DashboardPage() {
       <WelcomeBanner
         name={userName}
       />
-
 
       {/* =====================================================
           QUICK ACTIONS
@@ -355,7 +329,6 @@ function DashboardPage() {
 
       </section>
 
-
       {/* =====================================================
           LIVE STATISTICS
       ===================================================== */}
@@ -387,7 +360,6 @@ function DashboardPage() {
         />
 
       </section>
-
 
       {/* =====================================================
           OVERALL PROGRESS
@@ -423,21 +395,19 @@ function DashboardPage() {
 
       </section>
 
-
       {/* =====================================================
           GAMIFICATION
       ===================================================== */}
 
       <section className="dashboard-gamification">
 
-        <StreakCard />
+<StreakCard streak={streak} />
 
-        <XPCard />
+<XPCard xp={xp} />
 
-        <DailyGoalCard />
+<DailyGoalCard />
 
       </section>
-
 
       {/* =====================================================
           ACHIEVEMENTS

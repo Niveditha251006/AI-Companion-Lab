@@ -1,10 +1,15 @@
 from flask import Blueprint, request, jsonify
+import jwt
+import os
+from datetime import datetime, timedelta
 from database.connection import get_db_connection
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
 auth = Blueprint("auth", __name__)
-
+JWT_SECRET_KEY = os.getenv(
+    "JWT_SECRET_KEY"
+)
 
 # =========================
 # REGISTER
@@ -67,7 +72,6 @@ def register():
         "message": "Registration successful"
     }), 201
 
-
 # =========================
 # LOGIN
 # =========================
@@ -127,16 +131,31 @@ def login():
     cursor.close()
     db.close()
 
+    # ==========================================
+    # CREATE JWT TOKEN
+    # ==========================================
+
+    token = jwt.encode(
+        {
+            "user_id": user["id"],
+            "email": user["email"],
+            "exp": datetime.utcnow() + timedelta(hours=24)
+        },
+        JWT_SECRET_KEY,
+        algorithm="HS256"
+    )
+
     return jsonify({
         "message": "Login successful",
+
+        "token": token,
+
         "user": {
             "id": user["id"],
             "name": user["name"],
             "email": user["email"]
         }
     }), 200
-
-
 # =========================
 # GET PROFILE
 # =========================

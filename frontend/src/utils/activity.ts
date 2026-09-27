@@ -340,6 +340,19 @@ export const recordPromptActivity =
     // Add improved prompt
     activity.promptsImproved += 1;
 
+    // Add to total improved prompts
+    const totalPrompts =
+      Number(
+        localStorage.getItem(
+          "totalPromptsImproved"
+        )
+      ) || 0;
+
+    localStorage.setItem(
+      "totalPromptsImproved",
+      String(totalPrompts + 1)
+    );
+
     // Add 10 XP
     activity.xpEarned += 10;
 

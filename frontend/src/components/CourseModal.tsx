@@ -17,11 +17,13 @@ type Course = {
 type Props = {
   course: Course;
   onClose: () => void;
+  onProgressUpdate: (courseId: number, progress: number) => Promise<void>;
 };
 
 function CourseModal({
   course,
   onClose,
+  onProgressUpdate,
 }: Props) {
   const lessons =
     courseLessons[course.id] || [];
@@ -44,48 +46,60 @@ function CourseModal({
   const [completedLessons, setCompletedLessons] =
     useState(initialCompletedLessons);
 
-  const completeLesson = (
-    lessonIndex: number
-  ) => {
-    /*
-     * Prevent completing the same lesson
-     * multiple times.
-     */
-    if (lessonIndex < completedLessons) {
-      return;
-    }
+  
+    const completeLesson = async (
+  lessonIndex: number
+) => {
+  if (lessonIndex < completedLessons) {
+    return;
+  }
 
-    /*
-     * Lessons must be completed in order.
-     */
-    if (lessonIndex !== completedLessons) {
-      alert(
-        "📚 Please complete the previous lesson first."
-      );
-
-      return;
-    }
-
-    setCompletedLessons(
-      completedLessons + 1
+  if (lessonIndex !== completedLessons) {
+    alert(
+      "📚 Please complete the previous lesson first."
     );
 
-    /*
-     * Update the global activity system.
-     *
-     * This gives:
-     * +10 XP
-     * daily activity update
-     * daily goal update
-     * streak update
-     * achievement update
-     */
+    return;
+  }
+
+  const newCompletedLessons =
+    completedLessons + 1;
+
+  const newProgress =
+    lessons.length > 0
+      ? Math.round(
+          (newCompletedLessons /
+            lessons.length) *
+            100
+        )
+      : 0;
+
+  try {
+    await onProgressUpdate(
+      course.id,
+      newProgress
+    );
+
+    setCompletedLessons(
+      newCompletedLessons
+    );
+
     recordLessonActivity();
 
     alert(
       "🎉 Lesson completed! +10 XP"
     );
-  };
+  } catch (error) {
+    console.error(
+      "Failed to save lesson progress:",
+      error
+    );
+
+    alert(
+      "❌ Failed to save progress. Please try again."
+    );
+  }
+};  
 
   const progress =
     lessons.length > 0

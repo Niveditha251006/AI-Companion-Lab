@@ -1,85 +1,12 @@
-import { useEffect, useState } from "react";
 import "../styles/StreakCard.css";
 
-function StreakCard() {
-  const [streak, setStreak] =
-    useState(0);
+type StreakCardProps = {
+  streak: number;
+};
 
-  const loadStreak = () => {
-    const savedStreak =
-      Number(
-        localStorage.getItem(
-          "streak"
-        )
-      ) || 0;
-
-    const lastActiveDate =
-      localStorage.getItem(
-        "lastActiveDate"
-      );
-
-    const today =
-      new Date().toDateString();
-
-    if (!lastActiveDate) {
-      setStreak(0);
-      return;
-    }
-
-    if (
-      lastActiveDate === today
-    ) {
-      setStreak(savedStreak);
-      return;
-    }
-
-    const yesterday =
-      new Date();
-
-    yesterday.setDate(
-      yesterday.getDate() - 1
-    );
-
-    if (
-      lastActiveDate ===
-      yesterday.toDateString()
-    ) {
-      setStreak(savedStreak);
-    } else {
-      localStorage.setItem(
-        "streak",
-        "0"
-      );
-
-      setStreak(0);
-    }
-  };
-
-  useEffect(() => {
-    loadStreak();
-
-    window.addEventListener(
-      "activityUpdated",
-      loadStreak
-    );
-
-    window.addEventListener(
-      "focus",
-      loadStreak
-    );
-
-    return () => {
-      window.removeEventListener(
-        "activityUpdated",
-        loadStreak
-      );
-
-      window.removeEventListener(
-        "focus",
-        loadStreak
-      );
-    };
-  }, []);
+function StreakCard({
+  streak,
+}: StreakCardProps) {
 
   return (
     <div className="streak-card">

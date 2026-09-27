@@ -10,6 +10,9 @@ import ProfilePage from "../pages/ProfilePage";
 import AIChatPage from "../pages/AIChatPage";
 import InsightPage from "../pages/InsightPage";
 import ProtectedRoute from "../components/ProtectedRoute";
+import FactCheckerPage from "../pages/FactCheckerPage";
+import BiasLabPage from "../pages/BiasLabPage";
+import APIPlaygroundPage from "../pages/APIPlaygroundPage";
 
 function AppRoutes() {
   return (
@@ -46,6 +49,11 @@ function AppRoutes() {
           }
         />
 
+   <Route
+      path="/fact-checker"
+      element={<FactCheckerPage />}
+       />
+
         <Route
           path="/chat-analyzer"
           element={
@@ -71,6 +79,10 @@ function AppRoutes() {
     </ProtectedRoute>
   }
 />
+<Route
+  path="/api-playground"
+  element={<APIPlaygroundPage />}
+/>
         <Route
           path="/learning"
           element={
@@ -79,7 +91,10 @@ function AppRoutes() {
             </ProtectedRoute>
           }
         />
-
+<Route
+  path="/bias-lab"
+  element={<BiasLabPage />}
+/>
         <Route
           path="/profile"
           element={
