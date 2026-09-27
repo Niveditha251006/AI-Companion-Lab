@@ -9,22 +9,6 @@ import StreakCard from "../components/StreakCard";
 import XPCard from "../components/XPCard";
 import AchievementCard from "../components/AchievementCard";
 
-type DashboardData = {
-  user: {
-    id: number;
-    name: string;
-    email: string;
-  };
-
-  statistics: {
-  prompt_count: number;
-  completed_courses: number;
-  overall_progress: number;
-  xp: number;
-  streak: number;
-};
-};
-
 const API_BASE_URL =
   "http://127.0.0.1:5000/api";
 

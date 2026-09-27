@@ -737,9 +737,9 @@ console.log(
   <CourseModal
     course={lastOpenedCourse}
     onClose={() => setShowModal(false)}
-    onProgressUpdate={async (courseId, progress) => {
-      await increaseProgress(courseId);
-    }}
+    onProgressUpdate={async (courseId) => {
+  await increaseProgress(courseId);
+}}
   />
 )}
   
