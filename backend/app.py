@@ -2,8 +2,29 @@ from flask import Flask
 from flask_cors import CORS
 from dotenv import load_dotenv
 
-# Load environment variables before importing application modules
+# Load environment variables
 load_dotenv()
+
+# Create Flask application FIRST
+app = Flask(__name__)
+
+# Enable CORS
+CORS(app)
+
+# =========================
+# HEALTH CHECK
+# =========================
+
+@app.route("/")
+def home():
+    return {
+        "status": "success",
+        "message": "AI Companion Lab API is live 🚀"
+    }
+
+# =========================
+# IMPORT BLUEPRINTS
+# =========================
 
 from api.auth import auth
 from api.chat_analysis import chat_analysis
@@ -16,74 +37,23 @@ from routes.activity import activity
 from api.fact_checker import fact_checker
 from api.prompt_analysis import prompt_analysis
 
-# Allow React frontend to communicate with Flask
-CORS(app)
-
 # =========================
 # REGISTER API BLUEPRINTS
 # =========================
 
-app.register_blueprint(
-    auth,
-    url_prefix="/api"
-)
-
-app.register_blueprint(
-    chat_analysis,
-    url_prefix="/api"
-)
-
-app.register_blueprint(
-    insights,
-    url_prefix="/api"
-)
-
-app.register_blueprint(
-    prompt_history,
-    url_prefix="/api"
-)
-
-app.register_blueprint(
-    learning,
-    url_prefix="/api"
-)
-
-app.register_blueprint(
-    dashboard,
-    url_prefix="/api"
-)
-
-app.register_blueprint(
-    activity,
-    url_prefix="/api"
-)
-
-app.register_blueprint(
-    ai_chat,
-    url_prefix="/api"
-)
-app.register_blueprint(
-    fact_checker,
-     url_prefix="/api"
- )
-app.register_blueprint(
-    prompt_analysis,
-    url_prefix="/api"
-)
-# =========================
-# API HEALTH ROUTE
-# =========================
-
-@app.route("/")
-def home():
-    return {
-        "status": "success",
-        "message": "AI Companion Lab API is live 🚀"
-    }
-
+app.register_blueprint(auth, url_prefix="/api")
+app.register_blueprint(chat_analysis, url_prefix="/api")
+app.register_blueprint(insights, url_prefix="/api")
+app.register_blueprint(prompt_history, url_prefix="/api")
+app.register_blueprint(learning, url_prefix="/api")
+app.register_blueprint(dashboard, url_prefix="/api")
+app.register_blueprint(activity, url_prefix="/api")
+app.register_blueprint(ai_chat, url_prefix="/api")
+app.register_blueprint(fact_checker, url_prefix="/api")
+app.register_blueprint(prompt_analysis, url_prefix="/api")
 
 # =========================
-# RUN FLASK SERVER
+# LOCAL RUN
 # =========================
 
 if __name__ == "__main__":
