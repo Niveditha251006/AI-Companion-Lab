@@ -6,10 +6,7 @@ from routes.activity import activity
 from api.fact_checker import fact_checker
 from api.prompt_analysis import prompt_analysis
 
-# IMPORTANT: create Flask app FIRST
 app = Flask(__name__)
-
-# Then enable CORS
 CORS(app)
 
 
