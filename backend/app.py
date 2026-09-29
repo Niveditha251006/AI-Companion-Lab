@@ -16,15 +16,6 @@ from routes.activity import activity
 from api.fact_checker import fact_checker
 from api.prompt_analysis import prompt_analysis
 
-app = Flask(__name__)
-
-@app.route("/")
-def home():
-    return {
-        "status": "success",
-        "message": "AI Companion Lab API is running!"
-    }
-
 # Allow React frontend to communicate with Flask
 CORS(app)
 
@@ -80,15 +71,21 @@ app.register_blueprint(
     url_prefix="/api"
 )
 # =========================
-# RUN FLASK SERVER
+# API HEALTH ROUTE
 # =========================
+
 @app.route("/")
 def home():
     return {
         "status": "success",
         "message": "AI Companion Lab API is live 🚀"
     }
-    
+
+
+# =========================
+# RUN FLASK SERVER
+# =========================
+
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
