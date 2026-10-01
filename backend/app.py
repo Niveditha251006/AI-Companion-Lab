@@ -23,7 +23,7 @@ from routes.learning import learning
 
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "https://ai-companion-lab-frontend.onrender.com"}})
 
 
 # =========================
